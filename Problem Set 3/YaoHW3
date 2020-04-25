@@ -1,0 +1,9 @@
+#for Homework3 Data Science in Practice
+SELECT S.publication_number as origin, C.publication_number as citation 
+FROM `patents-public-data.patents.publications` AS S, UNNEST(S.citation) as C
+WHERE S.publication_date >= 20160101 and S.publication_date <= 20211231 and
+      C.publication_number  IN 
+      ( SELECT pubs.publication_number as pubsnum
+        FROM `patents-public-data.patents.publications` AS pubs, UNNEST(pubs.cpc) as CPC
+        WHERE pubs.publication_date >= 20160101 and pubs.publication_date <= 20161231 
+        and CPC.code LIKE 'G06Q30/06%')
